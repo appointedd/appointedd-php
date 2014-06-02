@@ -1,5 +1,4 @@
 <?php
-error_reporting(E_ALL); ini_set('display_errors', 1);
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Subscriber\Mock;
@@ -28,23 +27,27 @@ class AppointeddTest extends \PHPUnit_Framework_TestCase {
 		$this->assertInstanceOf('Appointedd\Appointedd\Appointedd', $instance);
 	}
 
-	public function testSetClientCredentials() {
-		$token = '123';
-
-		$clientId = '538745a8c202222b7cc3f1b8';
-		$clientSecret = '';
-		
-		$instance = $this->stub->setClientCredentials($clientId, $clientSecret);
-		$this->assertInstanceOf('Appointedd\Appointedd\Appointedd', $instance);
-	}
-
 	public function testMissingAccessToken() {
 		$this->setExpectedException('InvalidArgumentException', 'MissingAccessToken');
 		$this->stub->setAccessToken();
 	}
 
-	public function testGetAccessToken() {
-		//
+	public function testSetClientCredentials() {
+		$clientId = '538745a8c202222b7cc3f1b8';
+		$clientSecret = '538745a8c202222b7cc3f1b8';
+		
+		$instance = $this->stub->setClientCredentials($clientId, $clientSecret);
+		$this->assertInstanceOf('Appointedd\Appointedd\Appointedd', $instance);
+	}
+
+	public function testMissingUsername() {
+		$this->setExpectedException('InvalidArgumentException', 'MissingUsername');
+		$this->stub->getAccessTokenFromLogin(null,123);	
+	}
+
+	public function testMissingPassword() {
+		$this->setExpectedException('InvalidArgumentException', 'MissingPassword');
+		$this->stub->getAccessTokenFromLogin(123,null);
 	}
 
 	public function testVerbs() {
