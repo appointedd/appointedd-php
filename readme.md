@@ -30,8 +30,10 @@ Add the following entry to the providers array in config/app.php
 
 ##Usage
 
+	use Appointedd\Appointedd\Appointedd; // Non-Laravel users only
+
 	$apClientWToken = Appointedd::setAccessToken('gTHZNc7DVZJI24KIcFLHTipMIqUWFSrA');
-	$customers = $apClientWToken->get('salon/staff', array('query'=>Input::get('query', '')));
+	$customers = $apClientWToken->get('organisation/customers', array('query'=>Input::get('query', '')));
 	if(is_object($customers))
 		var_dump($customers->json());
 
