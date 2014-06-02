@@ -1,0 +1,21 @@
+{
+    "name": "appointedd/appointedd",
+    "description": "",
+    "authors": [
+        {
+            "name": "Billy Jones",
+            "email": "billy@appointedd.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.1.*",
+        "guzzlehttp/guzzle": "~4.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Appointedd\\Appointedd": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
