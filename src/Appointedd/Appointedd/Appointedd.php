@@ -10,9 +10,13 @@ class Appointedd
 
     private $client;
 
-    // credentials
+    // client credentials
     private $clientId;
     private $clientSecret;
+
+    // user credentials
+    private $username;
+    private $password;
     
     // oauth urls
     private $oauthAuthoriseURL = 'http://api.appointedd.dev/oauth/authorise';
@@ -51,6 +55,7 @@ class Appointedd
         $authoriseURL  = $this->oauthAuthoriseURL;
         $authoriseURL .= '?response_type=code';
         $authoriseURL .= '&client_id='.$this->clientId;
+        $authoriseURL .= '&client_secret='.$this->clientSecret;
         $authoriseURL .= '&state=requested';
         $authoriseURL .= '&redirect_uri='.urlencode($callback);
         
@@ -64,22 +69,50 @@ class Appointedd
      * @param  string $callback return url
      * @return array           token response from API
      */
-    public function getAccessToken($code, $callback){
+    public function getAccessTokenFromCode($code, $callback){
         
         // params to send to oauth receiver
         $params = array(
             'code' => $code,
             'grant_type' => 'authorization_code',
             'client_id'=>$this->clientId,
+            'client_secret'=>$this->clientSecret,
             'response_type'=>'token',
             'redirect_uri' => urlencode($callback)
         );
         
         // call oauth
         $result = $this->call('', 'oauth', $params);
+            
+        // Return the response as an array
+        return $result;
+    }
+
+    /**
+     * Get the access_token from user credentials
+     * @param  string $code
+     * @param  string $callback Return url
+     * @return array Token response from API
+     */
+    public function getAccessTokenFromLogin($username = null, $password = null){
         
-        // Save accessToken
-        $this->accessToken = $result['access_token'];
+        if(!$username)
+            throw new InvalidArgumentException("MissingUsername", 1);
+
+        if(!$password)
+            throw new InvalidArgumentException("MissingPassword", 1);
+
+        // params to send to oauth receiver
+        $params = array(
+            'grant_type' => 'password',
+            'client_id'=>$this->clientId,
+            'client_secret'=>$this->clientSecret,
+            'username'=>$username,
+            'password'=>$password
+        );
+        
+        // call oauth
+        $result = $this->call('', 'oauth', $params);
     
         // Return the response as an array
         return $result;
@@ -95,8 +128,8 @@ class Appointedd
         if(!$clientId)
             throw new InvalidArgumentException("MissingClientId", 1);
 
-        // if(!$clientSecret)
-        //     throw new InvalidArgumentException("MissingClientSecret", 1);
+        if(!$clientSecret)
+            throw new InvalidArgumentException("MissingClientSecret", 1);
 
         $appointeddInstance = new Appointedd;
 
@@ -175,7 +208,8 @@ class Appointedd
                     break;
 
                 case 'oauth':
-                    $response = $this->client->post($this->oauthAccessTokenURL. '/' . $endpoint, $headers, $data);
+                    $wrappedData = array('body'=>$data);
+                    $response = $this->client->post($this->oauthAccessTokenURL, $wrappedData);
                     break;
                 
                 default:
