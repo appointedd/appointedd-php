@@ -1,5 +1,6 @@
 #Appointedd PHP Client
 
+[![Build Status](https://travis-ci.org/appointedd/appointedd-php.svg)](https://travis-ci.org/appointedd/appointedd-php)
 
 ##Getting Started
 
