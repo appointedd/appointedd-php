@@ -26,9 +26,6 @@ class Appointedd
     // base url for api calls
     private $apiUrl = 'http://api.appointedd.dev';
 
-    // shove errors in here
-    public $errors = array();
-
     /**
      * Construct sets up httpClient and accessToken
      * @param string|null $accessToken 
