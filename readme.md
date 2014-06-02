@@ -32,11 +32,15 @@ Add the following entry to the providers array in config/app.php
 
 	use Appointedd\Appointedd\Appointedd; // Non-Laravel users only
 
-	$apClientToken = Appointedd::setAccessToken('gTHZNc7DVZJI24KIcFLHTipMIqUWFSrA');
-	$customers = $apClientToken->get('organisation/customers');
+	$apClient = Appointedd::setAccessToken('gTHZNc7DVZJI24KIcFLHTipMIqUWFSrA');
+	$customers = $apClient->get('organisation/customers');
 	if(is_object($customers))
 		var_dump($customers->json());
 
 ##Endpoints
 
 TODO
+
+## Unit Tests
+
+Make sure you have PHPUnit installed. ```cd``` into the package root and run ```phpunit```
