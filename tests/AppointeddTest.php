@@ -96,9 +96,8 @@ class AppointeddTest extends \PHPUnit_Framework_TestCase {
 
 		$response = $stub->$verb('/');
 
-		$this->assertInternalType('array', $response);
-		$this->assertEquals(1, count($response));
-		$this->assertRegExp('/'.$code.'/i',$response['error']);
+		$this->assertObjectHasAttribute('error', $response);
+		$this->assertObjectHasAttribute('code', $response);
 	}
 }
 

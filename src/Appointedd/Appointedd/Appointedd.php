@@ -4,6 +4,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Config;
 use InvalidArgumentException;
+use StdClass;
 
 class Appointedd
 {
@@ -162,6 +163,7 @@ class Appointedd
     }
 
     public function post($endpoint, $data=array()) {
+        $data['client_id'] = $this->clientId;
     	$response = $this->call($endpoint, 'post', $data);
         return $response;
     }
@@ -197,7 +199,7 @@ class Appointedd
                     break;
 
                 case 'post':
-                    $response = $this->client->post($this->apiUrl. '/' . $endpoint, $headers, $data);               
+                    $response = $this->client->post($this->apiUrl. '/' . $endpoint, array('body'=>$data));               
                     break;
 
                 case 'delete':
@@ -217,7 +219,10 @@ class Appointedd
             return $response;
 
         } catch (RequestException $e) {
-            return array('error'=>$e->getMessage());
+            $return = new StdClass();
+            $return->error = $e->getMessage();
+            $return->code = $e->getResponse()->getStatusCode();
+            return $return;
         }
 
         return;
