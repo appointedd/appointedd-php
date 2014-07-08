@@ -28,7 +28,7 @@ class AppointeddTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testMissingAccessToken() {
-		$this->setExpectedException('InvalidArgumentException', 'MissingAccessToken');
+		$this->setExpectedException('Appointedd\Appointedd\Appointedd_MissingArgument', 'Access token is missing');
 		$this->stub->setAccessToken();
 	}
 
@@ -41,12 +41,12 @@ class AppointeddTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testMissingUsername() {
-		$this->setExpectedException('InvalidArgumentException', 'MissingUsername');
+		$this->setExpectedException('Appointedd\Appointedd\Appointedd_MissingArgument', 'Username is missing');
 		$this->stub->getAccessTokenFromLogin(null,123);	
 	}
 
 	public function testMissingPassword() {
-		$this->setExpectedException('InvalidArgumentException', 'MissingPassword');
+		$this->setExpectedException('Appointedd\Appointedd\Appointedd_MissingArgument', 'Password is missing');
 		$this->stub->getAccessTokenFromLogin(123,null);
 	}
 
@@ -94,10 +94,9 @@ class AppointeddTest extends \PHPUnit_Framework_TestCase {
 
 		$stub = new StubAppointedd(null, $client);
 
-		$response = $stub->$verb('/');
+		$this->setExpectedException('Appointedd\Appointedd\Appointedd_HTTPError');
 
-		$this->assertObjectHasAttribute('error', $response);
-		$this->assertObjectHasAttribute('code', $response);
+		$response = $stub->$verb('/');
 	}
 }
 

@@ -4,7 +4,10 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Config;
 use InvalidArgumentException;
-use StdClass;
+use Exception;
+
+class Appointedd_MissingArgument extends Exception {}
+class Appointedd_HTTPError extends Exception {}
 
 class Appointedd
 {
@@ -95,10 +98,10 @@ class Appointedd
     public function getAccessTokenFromLogin($username = null, $password = null){
         
         if(!$username)
-            throw new InvalidArgumentException("MissingUsername", 1);
+            throw new Appointedd_MissingArgument('Username is missing');
 
         if(!$password)
-            throw new InvalidArgumentException("MissingPassword", 1);
+            throw new Appointedd_MissingArgument('Password is missing');
 
         // params to send to oauth receiver
         $params = array(
@@ -124,10 +127,10 @@ class Appointedd
     public static function setClientCredentials($clientId = '', $clientSecret = ''){
 
         if(!$clientId)
-            throw new InvalidArgumentException("MissingClientId", 1);
+            throw new Appointedd_MissingArgument('Client ID is missing');
 
         if(!$clientSecret)
-            throw new InvalidArgumentException("MissingClientSecret", 1);
+            throw new Appointedd_MissingArgument('Client secret is missing');
 
         $appointeddInstance = new Appointedd;
 
@@ -145,7 +148,7 @@ class Appointedd
     public static function setAccessToken($accessToken = ''){
 
         if(!$accessToken)
-            throw new InvalidArgumentException("MissingAccessToken", 1);
+            throw new Appointedd_MissingArgument('Access token is missing');
 
         $appointeddInstance = new Appointedd($accessToken);
         return $appointeddInstance;
@@ -219,10 +222,7 @@ class Appointedd
             return $response;
 
         } catch (RequestException $e) {
-            $return = new StdClass();
-            $return->error = $e->getMessage();
-            $return->code = $e->getResponse()->getStatusCode();
-            return $return;
+            throw new Appointedd_HTTPError($e->getMessage());
         }
 
         return;
