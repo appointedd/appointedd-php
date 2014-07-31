@@ -198,7 +198,7 @@ class Appointedd
                     break;
 
                 case 'put':
-                    $response = $this->client->put($this->apiUrl. '/' . $endpoint, $headers, $data);
+                    $response = $this->client->put($this->apiUrl. '/' . $endpoint, array('body'=>$data));
                     break;
 
                 case 'post':
@@ -206,7 +206,7 @@ class Appointedd
                     break;
 
                 case 'delete':
-                    $response = $this->client->delete($this->apiUrl. '/' . $endpoint, $headers);
+                    $response = $this->client->delete($this->apiUrl. '/' . $endpoint.'?'. http_build_query($data), $headers);
                     break;
 
                 case 'oauth':
