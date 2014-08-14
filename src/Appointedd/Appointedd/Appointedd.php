@@ -8,6 +8,7 @@ use Exception;
 
 class Appointedd_MissingArgument extends Exception {}
 class Appointedd_HTTPError extends Exception {}
+class Appointedd_NotFound extends Exception {}
 
 class Appointedd
 {
@@ -222,9 +223,13 @@ class Appointedd
             return $response;
 
         } catch (RequestException $e) {
-            throw new Appointedd_HTTPError($e->getMessage());
+            if($e->getCode() === 404) {
+                throw new Appointedd_NotFound($e->getMessage());
+            } else {
+                throw new Appointedd_HTTPError($e->getMessage());
+            }
         }
 
         return;
-	}
+    }
 }
