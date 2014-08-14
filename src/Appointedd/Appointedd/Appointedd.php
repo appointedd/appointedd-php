@@ -24,12 +24,12 @@ class Appointedd
     private $password;
     
     // oauth urls
-    private $oauthAuthoriseURL = 'http://api.appointedd.dev/oauth/authorise';
-    private $oauthAccessTokenURL = 'http://api.appointedd.dev/oauth/access_token';
+    private $oauthAuthoriseURL = 'http://api.appointedd.com/oauth/authorise';
+    private $oauthAccessTokenURL = 'http://api.appointedd.com/oauth/access_token';
     private $accessToken;
 
     // base url for api calls
-    private $apiUrl = 'http://api.appointedd.dev';
+    private $apiUrl = 'http://api.appointedd.com';
 
     /**
      * Construct sets up httpClient and accessToken
