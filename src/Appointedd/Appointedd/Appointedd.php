@@ -10,6 +10,7 @@ class Appointedd_MissingArgument extends Exception {}
 class Appointedd_HTTPError extends Exception {}
 class Appointedd_NotFound extends Exception {}
 class Appointedd_Unauthorised extends Exception {}
+class Appointedd_Conflict extends Exception {}
 
 class Appointedd
 {
@@ -228,6 +229,8 @@ class Appointedd
                 throw new Appointedd_NotFound($e->getMessage());
             } else if($e->getCode() === 401) {
                 throw new Appointedd_Unauthorised($e->getMessage());
+            } else if($e->getCode() === 409){
+                throw new Appointedd_Conflict($e->getMessage());
             } else {
                 throw new Appointedd_HTTPError($e->getMessage());
             }
