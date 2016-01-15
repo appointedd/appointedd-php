@@ -144,6 +144,23 @@ class Appointedd
     }
 
     /**
+     * Chained method. Takes clientId create new class instance and passes back to next in chain
+     * @param string $clientId
+     * @return class instance
+     */
+    public static function setClient($clientId){
+
+        if(!$clientId)
+            throw new Appointedd_MissingArgument('Client ID is missing');
+
+        $appointeddInstance = new Appointedd;
+
+        $appointeddInstance->clientId = $clientId;
+
+        return $appointeddInstance;
+    }
+
+    /**
      * Chained method. Takes access token create new class instance and passes back to next in chain
      * @param string $accessToken
      * @return class instance
@@ -159,23 +176,34 @@ class Appointedd
 
 
     public function get($endpoint, $data=array()) {
-    	$response = $this->call($endpoint, 'get', $data);
+    	if($this->clientId) {
+            $data['client_id'] = $this->clientId;
+        }
+        $response = $this->call($endpoint, 'get', $data);
         return $response;
     }
 
     public function put($endpoint, $data=array()) {
-    	$response = $this->call($endpoint, 'put', $data);
+    	if($this->clientId) {
+            $data['client_id'] = $this->clientId;
+        }
+        $response = $this->call($endpoint, 'put', $data);
         return $response;
     }
 
     public function post($endpoint, $data=array()) {
-        $data['client_id'] = $this->clientId;
+        if($this->clientId) {
+            $data['client_id'] = $this->clientId;
+        }
     	$response = $this->call($endpoint, 'post', $data);
         return $response;
     }
 
     public function delete($endpoint, $data=array()) {
-    	$response = $this->call($endpoint, 'delete', $data);
+    	if($this->clientId) {
+            $data['client_id'] = $this->clientId;
+        }
+        $response = $this->call($endpoint, 'delete', $data);
         return $response;
     }
 
