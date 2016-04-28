@@ -6,11 +6,22 @@ use Illuminate\Support\Facades\Config;
 use InvalidArgumentException;
 use Exception;
 
-class Appointedd_MissingArgument extends Exception {}
-class Appointedd_HTTPError extends Exception {}
-class Appointedd_NotFound extends Exception {}
-class Appointedd_Unauthorised extends Exception {}
-class Appointedd_Conflict extends Exception {}
+
+class Appointedd_Error extends Exception {
+
+    public function __construct($message, $code = null, $response = null) {
+        $this->message = $message;
+        $this->code = $code;
+        $this->response = $response;
+    }
+}
+
+class Appointedd_MissingArgument extends Appointedd_Error {}
+class Appointedd_HTTPError extends Appointedd_Error {}
+class Appointedd_NotFound extends Appointedd_Error {}
+class Appointedd_Unauthorised extends Appointedd_Error {}
+class Appointedd_Conflict extends Appointedd_Error {}
+class Appointedd_CardError extends Appointedd_Error {}
 
 class Appointedd
 {
@@ -253,15 +264,23 @@ class Appointedd
             return $response;
 
         } catch (RequestException $e) {
+                
+            $responseBody = $e->getResponse()->json();
+
             if($e->getCode() === 404) {
-                throw new Appointedd_NotFound($e->getMessage());
+                throw new Appointedd_NotFound($e->getMessage(), $e->getCode(), $responseBody);
             } else if($e->getCode() === 401) {
-                throw new Appointedd_Unauthorised($e->getMessage());
+                throw new Appointedd_Unauthorised($e->getMessage(), $e->getCode(), $responseBody);
             } else if($e->getCode() === 409){
-                throw new Appointedd_Conflict($e->getMessage());
+                throw new Appointedd_Conflict($e->getMessage(), $e->getCode(), $responseBody);
+            } else if($e->getCode() === 402){
+                throw new Appointedd_CardError($e->getMessage(), $e->getCode(), $responseBody);
             } else {
-                throw new Appointedd_HTTPError($e->getMessage());
+                throw new Appointedd_HTTPError($e->getMessage(), $e->getCode(), $responseBody);
             }
+
+        } catch (Exception $e) {
+            throw new Appointedd_HTTPError($e->getMessage());
         }
 
         return;
