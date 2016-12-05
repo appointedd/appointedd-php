@@ -37,12 +37,12 @@ class Appointedd
     private $password;
     
     // oauth urls
-    private $oauthAuthoriseURL = 'http://api.appointedd.com/oauth/authorise';
-    private $oauthAccessTokenURL = 'http://api.appointedd.com/oauth/access_token';
+    private $oauthAuthoriseURL;
+    private $oauthAccessTokenURL;
     private $accessToken;
 
     // base url for api calls
-    private $apiUrl = 'http://api.appointedd.com';
+    private $apiUrl;
 
     /**
      * Construct sets up httpClient and accessToken
@@ -50,6 +50,18 @@ class Appointedd
      * @param \GuzzleHttp\Client|null $httpClient 
      */
     public function __construct($accessToken = null, \GuzzleHttp\Client $httpClient = null) {
+
+        // default domain
+        $domain = 'https://api.appointedd.com';
+
+        // override the domain
+        if(getenv('APPOINTEDD_ENV_DOMAIN')) {
+            $domain = getenv('APPOINTEDD_ENV_DOMAIN');
+        }
+
+        $this->oauthAuthoriseURL = ($domain . '/oauth/authorise');
+        $this->oauthAccessTokenURL = ($domain . '/oauth/access_token');
+        $this->apiUrl = $domain;
 
         if($httpClient) {
             $this->client = $httpClient;
