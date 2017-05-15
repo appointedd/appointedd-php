@@ -52,7 +52,7 @@ class Appointedd
     public function __construct($accessToken = null, \GuzzleHttp\Client $httpClient = null) {
 
         // default domain
-        $domain = 'https://api.appointedd.com';
+        $domain = 'https://internal-api.appointedd.com';
 
         // override the domain
         if(getenv('APPOINTEDD_ENV_DOMAIN')) {
