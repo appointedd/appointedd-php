@@ -239,32 +239,32 @@ class Appointedd
      */
 	private function call($endpoint, $type, $data = array()) {
 
-        if($this->accessToken)
-        	$data['access_token'] = $this->accessToken;
-
         $headers = array();
+        
+        if($this->accessToken)
+            $headers['Access-Token'] = $this->accessToken;
 
         try {
             
             switch ($type) {
                 case 'get':
-                    $response = $this->client->get($this->apiUrl. '/' . $endpoint.'?'. http_build_query($data), $headers);
+                    $response = $this->client->get($this->apiUrl. '/' . $endpoint.'?'. http_build_query($data), array('headers' => $headers));
                     break;
 
                 case 'put':
-                    $response = $this->client->put($this->apiUrl. '/' . $endpoint, array('body'=>$data));
+                    $response = $this->client->put($this->apiUrl. '/' . $endpoint, array('body'=>$data, 'headers' => $headers));
                     break;
 
                 case 'post':
-                    $response = $this->client->post($this->apiUrl. '/' . $endpoint, array('body'=>$data));               
+                    $response = $this->client->post($this->apiUrl. '/' . $endpoint, array('body'=>$data, 'headers' => $headers));               
                     break;
 
                 case 'delete':
-                    $response = $this->client->delete($this->apiUrl. '/' . $endpoint.'?'. http_build_query($data), $headers);
+                    $response = $this->client->delete($this->apiUrl. '/' . $endpoint.'?'. http_build_query($data),  array('headers' => $headers));
                     break;
 
                 case 'oauth':
-                    $wrappedData = array('body'=>$data);
+                    $wrappedData = array('body'=>$data, 'headers' => $headers);
                     $response = $this->client->post($this->oauthAccessTokenURL, $wrappedData);
                     break;
                 
